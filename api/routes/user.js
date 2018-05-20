@@ -70,14 +70,23 @@ router.post('/signin', (req, res, next) => {
         if (error) {
           return res.status(401).json({ message: 'Auth failed' })
         }
-
+        // If the user is found and the password match  
         if (result) {
           // Sign the token
-          jwt.sign({
+          const token = jwt.sign({
             email: user.email,
             userId: user._id
+          }, 
+          process.env.JWT_KEY,
+          {
+            expiresIn: '1h'
+          } 
+        )
+          // Send the response
+          return res.status(200).json({ 
+            message: 'Auth succesful', 
+            token
           })
-          return res.status(200).json({ message: 'Auth succesful' })
         }
 
         return res.status(401).json({ message: 'Auth failed' })
