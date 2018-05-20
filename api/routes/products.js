@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose')
 const multer = require('multer')
+const checkAuth = require('../middleware/check-auth')
 
 // DB Models
 const Product = require('../models/product')
@@ -65,7 +66,7 @@ router.get('/', (req, res, next) => {
 })
 
 // Creating new products
-router.post('/', upload.single('productImage'), (req, res, next) => {
+router.post('/', checkAuth, upload.single('productImage'), (req, res, next) => {
   console.log(req.file);
   // Creating a new product instance
   const product = new Product({
@@ -129,7 +130,7 @@ router.get('/:productId', (req, res, next) => {
 })
 
 // Update the name or price of a product
-router.patch('/:productId', (req, res, next) => {
+router.patch('/:productId', checkAuth, (req, res, next) => {
   const id = req.params.productId;
   const updateOps = {}
   // Iterating through the req.params object to check what params are available
@@ -153,7 +154,7 @@ router.patch('/:productId', (req, res, next) => {
 })
 
 // Remove a product from the db
-router.delete('/:productId', (req, res, next) => {
+router.delete('/:productId', checkAuth, (req, res, next) => {
   const id = req.params.productId;
   Product.findByIdAndRemove(id)
     .exec()

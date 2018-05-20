@@ -73,15 +73,16 @@ router.post('/signin', (req, res, next) => {
         // If the user is found and the password match  
         if (result) {
           // Sign the token
-          const token = jwt.sign({
-            email: user.email,
-            userId: user._id
-          }, 
-          process.env.JWT_KEY,
-          {
-            expiresIn: '1h'
-          } 
-        )
+          const token = jwt.sign(
+            {
+              email: user.email,
+              userId: user._id
+            }, 
+            process.env.JWT_KEY,
+            {
+              expiresIn: '1h'
+            } 
+          )
           // Send the response
           return res.status(200).json({ 
             message: 'Auth succesful', 
