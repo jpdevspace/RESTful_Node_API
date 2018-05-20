@@ -73,7 +73,10 @@ router.post('/signin', (req, res, next) => {
 
         if (result) {
           // Sign the token
-          jwt.sign()
+          jwt.sign({
+            email: user.email,
+            userId: user._id
+          })
           return res.status(200).json({ message: 'Auth succesful' })
         }
 
